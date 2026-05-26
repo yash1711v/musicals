@@ -16,7 +16,7 @@ UI state is handled with `flutter_bloc`. Playback never talks directly to widget
 
 ## Audio Handling
 
-Tracks are generated as short WAV loops, encrypted with AES, and stored in the app support directory with obfuscated filenames. At playback time the bytes are decrypted in memory and streamed to `just_audio` through a custom audio source. The raw audio is not written to public storage or normal cache directories.
+The bundled local file at `assets/audio/sample_backing_loop.wav` is read by the local audio data source, encrypted with AES, and stored in the app support directory with an obfuscated filename. At playback time the bytes are decrypted in memory and streamed to `just_audio` through a custom audio source. The raw audio is not written to public storage or normal cache directories.
 
 Loop mode uses `just_audio` loop controls after preloading the selected source. Switching tracks stops the current source before loading the next encrypted buffer.
 

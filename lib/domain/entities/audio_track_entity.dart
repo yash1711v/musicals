@@ -6,6 +6,7 @@ class AudioTrackEntity extends Equatable {
     required this.title,
     required this.bpm,
     required this.duration,
+    required this.assetPath,
     required this.encryptedPath,
     required this.description,
   });
@@ -14,6 +15,7 @@ class AudioTrackEntity extends Equatable {
   final String title;
   final int bpm;
   final Duration duration;
+  final String assetPath;
   final String encryptedPath;
   final String description;
 
@@ -23,6 +25,7 @@ class AudioTrackEntity extends Equatable {
     title,
     bpm,
     duration,
+    assetPath,
     encryptedPath,
     description,
   ];

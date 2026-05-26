@@ -7,19 +7,19 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../../domain/entities/audio_track_entity.dart';
-import 'audio_sample_synthesizer.dart';
+import '../local/local_audio_file_data_source.dart';
 
 class SecureAudioVault {
   SecureAudioVault({
     required FlutterSecureStorage secureStorage,
-    required AudioSampleSynthesizer synthesizer,
+    required LocalAudioFileDataSource localAudioFileDataSource,
   }) : _secureStorage = secureStorage,
-       _synthesizer = synthesizer;
+       _localAudioFileDataSource = localAudioFileDataSource;
 
   static const _keyName = 'secure_audio_vault_key';
 
   final FlutterSecureStorage _secureStorage;
-  final AudioSampleSynthesizer _synthesizer;
+  final LocalAudioFileDataSource _localAudioFileDataSource;
 
   Future<Uint8List> loadDecryptedBytes(AudioTrackEntity track) async {
     final file = await _fileFor(track);
@@ -56,7 +56,7 @@ class SecureAudioVault {
   Future<void> _writeEncryptedTrack(File file, AudioTrackEntity track) async {
     final key = await _key();
     final iv = encrypt.IV.fromSecureRandom(16);
-    final bytes = _synthesizer.build(track);
+    final bytes = await _localAudioFileDataSource.load(track);
     final encrypter = encrypt.Encrypter(
       encrypt.AES(key, mode: encrypt.AESMode.cbc),
     );
