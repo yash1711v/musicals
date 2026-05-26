@@ -27,4 +27,6 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/audio/sample_backing_loop.wav
+    - assets/audio/sample-9s.wav
+    - assets/audio/sample-12s.wav
+    - assets/audio/sample-15s.wav
