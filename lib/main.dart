@@ -11,11 +11,11 @@ import 'presentation/pages/practice_deck/practice_deck_page.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await setupLocator();
-  runApp(const PracticeDeckApp());
+  runApp(const MusicMist());
 }
 
-class PracticeDeckApp extends StatelessWidget {
-  const PracticeDeckApp({super.key});
+class MusicMist extends StatelessWidget {
+  const MusicMist({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class PracticeDeckApp extends StatelessWidget {
         BlocProvider(create: (_) => sl<SecurityBloc>()),
       ],
       child: MaterialApp(
-        title: 'Secure Practice Deck',
+        title: 'MusicMist',
         debugShowCheckedModeBanner: false,
         theme: AppTheme.light,
         home: const PracticeDeckPage(),

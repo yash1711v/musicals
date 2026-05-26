@@ -13,7 +13,7 @@ void main() {
   });
 
   testWidgets('practice deck renders core sections', (tester) async {
-    await tester.pumpWidget(const PracticeDeckApp());
+    await tester.pumpWidget(const MusicMist());
     await tester.pump(const Duration(milliseconds: 100));
 
     expect(find.text('Practice Deck'), findsOneWidget);
