@@ -28,11 +28,14 @@ class SecureAudioService {
 
   Future<void> load(AudioTrackEntity track) async {
     await _player.stop();
+    await _player.seek(Duration.zero);
     final bytes = await _vault.loadDecryptedBytes(track);
-    await _player.setAudioSource(
-      MemoryAudioSource(bytes: bytes, contentType: 'audio/wav', tag: track),
-      preload: true,
+    final source = MemoryAudioSource(
+      bytes: bytes,
+      contentType: 'audio/wav',
+      tag: track,
     );
+    await _player.setAudioSource(source, preload: true);
     await setLoop(_loopEnabled);
   }
 
@@ -60,6 +63,10 @@ class SecureAudioService {
 
   Future<bool> isProtected(AudioTrackEntity track) {
     return _vault.isProtected(track);
+  }
+
+  bool isCached(AudioTrackEntity track) {
+    return _vault.isCached(track);
   }
 
   Future<void> dispose() {

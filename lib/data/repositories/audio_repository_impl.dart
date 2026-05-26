@@ -71,4 +71,9 @@ class AudioRepositoryImpl implements AudioRepository {
 
     return _secureAudioService.isProtected(track);
   }
+
+  @override
+  Future<bool> isTrackCached(AudioTrackEntity track) async {
+    return _secureAudioService.isCached(track);
+  }
 }

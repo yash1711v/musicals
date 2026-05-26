@@ -224,22 +224,33 @@ class AudioPlayerBloc extends Bloc<AudioPlayerEvent, AudioPlayerState> {
     AudioTrackLoaded event,
     Emitter<AudioPlayerState> emit,
   ) async {
-    emit(
-      state.copyWith(
-        status: AudioPlaybackStatus.loading,
-        track: event.track,
-        position: Duration.zero,
-        duration: event.track.duration,
-        clearError: true,
-      ),
-    );
+    final shouldResume = state.isPlaying;
+    final cached = await _repository.isTrackCached(event.track);
+
+    if (!cached) {
+      emit(
+        state.copyWith(
+          status: AudioPlaybackStatus.loading,
+          track: event.track,
+          position: Duration.zero,
+          duration: event.track.duration,
+          clearError: true,
+        ),
+      );
+    }
 
     try {
       await _loadTrack(event.track);
       final protected = await _repository.isAudioProtected();
+      if (shouldResume) {
+        await _playAudio();
+      }
+
       emit(
         state.copyWith(
-          status: AudioPlaybackStatus.ready,
+          status: shouldResume
+              ? AudioPlaybackStatus.playing
+              : AudioPlaybackStatus.ready,
           track: event.track,
           position: Duration.zero,
           duration: event.track.duration,

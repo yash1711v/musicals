@@ -20,8 +20,14 @@ class SecureAudioVault {
 
   final FlutterSecureStorage _secureStorage;
   final LocalAudioFileDataSource _localAudioFileDataSource;
+  final Map<String, Uint8List> _decryptedCache = {};
 
   Future<Uint8List> loadDecryptedBytes(AudioTrackEntity track) async {
+    final cached = _decryptedCache[track.id];
+    if (cached != null) {
+      return cached;
+    }
+
     final file = await _fileFor(track);
 
     if (!await file.exists()) {
@@ -45,12 +51,20 @@ class SecureAudioVault {
       encrypt.AES(key, mode: encrypt.AESMode.cbc),
     );
 
-    return Uint8List.fromList(encrypter.decryptBytes(encrypted, iv: iv));
+    final decrypted = Uint8List.fromList(
+      encrypter.decryptBytes(encrypted, iv: iv),
+    );
+    _decryptedCache[track.id] = decrypted;
+    return decrypted;
   }
 
   Future<bool> isProtected(AudioTrackEntity track) async {
     final file = await _fileFor(track);
     return file.exists();
+  }
+
+  bool isCached(AudioTrackEntity track) {
+    return _decryptedCache.containsKey(track.id);
   }
 
   Future<void> _writeEncryptedTrack(File file, AudioTrackEntity track) async {

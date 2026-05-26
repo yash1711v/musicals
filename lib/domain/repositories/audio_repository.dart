@@ -24,4 +24,6 @@ abstract class AudioRepository {
   Future<void> setLoop(bool enabled);
 
   Future<bool> isAudioProtected();
+
+  Future<bool> isTrackCached(AudioTrackEntity track);
 }
