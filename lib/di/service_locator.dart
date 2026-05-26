@@ -4,8 +4,8 @@ import 'package:just_audio/just_audio.dart';
 
 import '../core/security/screen_security_service.dart';
 import '../core/security/security_service.dart';
+import '../data/datasources/local/local_audio_file_data_source.dart';
 import '../data/datasources/local/local_track_data_source.dart';
-import '../data/datasources/secure_audio/audio_sample_synthesizer.dart';
 import '../data/datasources/secure_audio/secure_audio_service.dart';
 import '../data/datasources/secure_audio/secure_audio_vault.dart';
 import '../data/repositories/audio_repository_impl.dart';
@@ -22,9 +22,10 @@ final sl = GetIt.instance;
 Future<void> setupLocator() async {
   sl
     ..registerLazySingleton(() => const FlutterSecureStorage())
-    ..registerLazySingleton(AudioSampleSynthesizer.new)
+    ..registerLazySingleton(LocalAudioFileDataSource.new)
     ..registerLazySingleton(
-      () => SecureAudioVault(secureStorage: sl(), synthesizer: sl()),
+      () =>
+          SecureAudioVault(secureStorage: sl(), localAudioFileDataSource: sl()),
     )
     ..registerLazySingleton(
       () => SecureAudioService(player: AudioPlayer(), vault: sl()),
